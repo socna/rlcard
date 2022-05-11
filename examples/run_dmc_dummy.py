@@ -34,18 +34,9 @@ if __name__ == '__main__':
     parser.add_argument(
         '--env',
         type=str,
-        default='leduc-holdem',
+        default='dummy',
         choices=[
-            'blackjack',
-            'leduc-holdem',
-            'limit-holdem',
-            'doudizhu',
-            'mahjong',
-            'no-limit-holdem',
-            'uno',
-            'gin-rummy',
-            'dummy',
-            'demo'
+            'dummy'
         ],
     )
     parser.add_argument(
