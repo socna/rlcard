@@ -24,6 +24,7 @@ def train(args):
         num_actor_devices=args.num_actor_devices,
         num_actors=args.num_actors,
         training_device=args.training_device,
+        exp_epsilon=args.exp_epsilon
     )
 
     # Train DMC Agents
@@ -92,6 +93,15 @@ if __name__ == '__main__':
         type=str,
         help='The index of the GPU used for training models',
     )
+
+
+    parser.add_argument(
+        '--exp_epsilon',
+        default="0",
+        type=float,
+        help='exp_epsilon',
+    )
+
 
     args = parser.parse_args()
 
