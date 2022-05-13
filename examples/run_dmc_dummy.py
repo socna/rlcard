@@ -24,7 +24,6 @@ def train(args):
         num_actor_devices=args.num_actor_devices,
         num_actors=args.num_actors,
         training_device=args.training_device,
-        exp_epsilon=args.exp_epsilon
     )
 
     # Train DMC Agents
@@ -35,18 +34,9 @@ if __name__ == '__main__':
     parser.add_argument(
         '--env',
         type=str,
-        default='leduc-holdem',
+        default='dummy',
         choices=[
-            'blackjack',
-            'leduc-holdem',
-            'limit-holdem',
-            'doudizhu',
-            'mahjong',
-            'no-limit-holdem',
-            'uno',
-            'gin-rummy',
-            'dummy',
-            'demo'
+            'dummy'
         ],
     )
     parser.add_argument(
@@ -93,15 +83,6 @@ if __name__ == '__main__':
         type=str,
         help='The index of the GPU used for training models',
     )
-
-
-    parser.add_argument(
-        '--exp_epsilon',
-        default="0",
-        type=float,
-        help='exp_epsilon',
-    )
-
 
     args = parser.parse_args()
 
