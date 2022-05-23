@@ -32,7 +32,7 @@ class TestDummyGame(unittest.TestCase):
         state, current_player_id = game.init_game()
         self.assertEqual(current_player_id, 0)
 
-    def test_calculate_dangerous_cards(self):
+    def _test_calculate_dangerous_cards(self):
         # 36,37,38,39
         game = Game()
         game.configure(DEFAULT_GAME_CONFIG)
@@ -52,6 +52,8 @@ class TestDummyGame(unittest.TestCase):
         opponent = game.round.get_player(1)
         opponent.add_melds([4,2,3])
         opponent.add_melds([13,26,0])
+
+
 
         # opponent.score_cards.append(get_card("4", "S"))
         # opponent.score_cards.append(get_card("4", "C"))
@@ -75,15 +77,19 @@ class TestDummyGame(unittest.TestCase):
 
         game.step(271)
 
-    def _1test_proceed_game(self):
+    def test_proceed_game(self):
         game = Game()
         game.configure(DEFAULT_GAME_CONFIG)
-        game.init_game()
+        state, current_player_id = game.init_game()
         while not game.is_over():
+            print(state)
             legal_actions = game.judge.get_legal_actions()
 
             action = np.random.choice(legal_actions)
             state, _ = game.step(action)
+            
+            
+        
 
     def _1test_get_all_melds(self):
         cards = [get_card("K", "C"),get_card("A", "C"),get_card("2", "D")]
@@ -91,113 +97,67 @@ class TestDummyGame(unittest.TestCase):
         # print(find_all_relate_speto_meld([10, 13, 30]))
         # speto_cards = [10, 13]
 
+    def _1test_find_all_melds_depositable_by_speto(self):
+        # game = Game()
+        # game.init_game()
+
+        print(find_all_melds_depositable_by_speto([13]))
+
     def _test_play_failure(self):
         
         #meld 
         game = Game()
-        game.configure(DEFAULT_GAME_CONFIG)
+        # game.configure(DEFAULT_GAME_CONFIG)
         game.init_game()
 
+
         curr_player = game.round.get_player()
-        curr_player.add_melds([3,4,5])
-        game.round.dealer._speto_cards = [10,13, 40]
-        game.round.dealer.set_discard_pile([ 6, 8])
-        curr_player._hand = [27, 14, 10, 15, 1]
+        opponent = game.round.get_player((curr_player.player_id + 1) % 2)
+
+        opponent.add_melds([7, 20, 46])
+        opponent.add_melds([9, 35, 48, 22])
+        opponent.add_melds([4, 17, 43])
+
+        opponent._hand = [1,1, 1, 1, 1, 1, 1]
+        opponent._score_cards = [c for m in opponent.all_melds for c in m]
+
+        curr_player._hand = [45, 34]
+        curr_player.add_melds([11, 24, 37, 50])
+        curr_player.add_melds([16, 29, 42])
+        curr_player.add_melds([25, 38, 51, 12])
+
+        curr_player._score_cards = [c for m in curr_player.all_melds for c in m]
+
+
+        game.round.dealer._speto_cards = [10,13, 32]
+
+        game.round.dealer.set_discard_pile([0,0,0, 13])
+        
 
         curr_player.calculate_melds_in_hand()
 
-        game.round._calculate_dangerous_discard_lv1(curr_player)
-        game.round._calculate_dangerous_discard_lv2(curr_player, game.round.dealer.speto_cards)
-        game.round._calculate_dangerous_discard_lv3(curr_player, game.round.dealer.speto_cards)
+        # game.round._calculate_dangerous_discard_lv1(curr_player)
+        # game.round._calculate_dangerous_discard_lv2(curr_player, game.round.dealer.speto_cards)
+        # game.round._calculate_dangerous_discard_lv3(curr_player, game.round.dealer.speto_cards)
+        # game.round._calculate_melds_depositable_by_speto()
 
-        game._actions.append(0)
-        legal_actions = game.judge.get_legal_actions()
-
-        self.assertEqual(legal_actions, [1015, 1002, 998, 1003, 989, 699])
-        # print(["{}:{}".format(a, get_action_str(a)) for a in legal_actions])
-
-        state, id = game.step(699)
-
-        self.assertEqual(id, 0)
-
-        #take
-
-        game = Game()
-        game.configure(DEFAULT_GAME_CONFIG)
-        game.init_game()
-
-        curr_player = game.round.get_player()
-        game.round.dealer._speto_cards = [40, 10, 13]
-        game.round.dealer.set_discard_pile([41, 40, 6, 8])
-        curr_player._hand = [7, 9, 20, 21, 42, 43]
-
-        curr_player.calculate_melds_in_hand()
-
-        game.round._calculate_dangerous_discard_lv1(curr_player)
-        game.round._calculate_dangerous_discard_lv2(curr_player, game.round.dealer.speto_cards)
-        game.round._calculate_dangerous_discard_lv3(curr_player, game.round.dealer.speto_cards)
-
+        state, id = game.step(0)
         # game._actions.append(0)
-        legal_actions = game.judge.get_legal_actions()
+        # legal_actions = game.judge.get_legal_actions()
+        # print(legal_actions)
 
-        # print(["{}:{}".format(a, get_action_str(a)) for a in legal_actions])
-        self.assertEqual(legal_actions, [0, 599, 600, 619, 469, 470, 506])
+        print(state)
 
-        state, id = game.step(506)
-        self.assertEqual(id, 0)
+        # for ac in legal_actions:
+        #     print(get_action_str(ac))
 
-        
-        #discard 
-        game = Game()
-        game.configure(DEFAULT_GAME_CONFIG)
-        game.init_game()
+        # state, id = game.step(672)
 
-        curr_player = game.round.get_player()
-        game.round.dealer._speto_cards = [40, 10, 13]
-        
-        game.round.dealer.set_discard_pile([41, 40, 8])
-        curr_player._hand = [6, 7, 9, 20, 21, 42, 43]
-        curr_player.add_melds([3,4,5])
 
-        curr_player.calculate_melds_in_hand()
-
-        game.round._calculate_dangerous_discard_lv1(curr_player)
-        game.round._calculate_dangerous_discard_lv2(curr_player, game.round.dealer.speto_cards)
-        game.round._calculate_dangerous_discard_lv3(curr_player, game.round.dealer.speto_cards)
-
-        game._actions.append(0)
-        legal_actions = game.judge.get_legal_actions()
-
-        # print(["{}:{}".format(a, get_action_str(a)) for a in legal_actions])
-
-        state, id = game.step(994)
-        self.assertEqual(id, 1)
+        # for action_id in [343, 449, 450, 451, 452, 453, 454, 455, 456, 457, 672, 778, 779, 780, 781, 782, 783, 784, 785, 786]:
+        #     print(get_action_str(action_id))
 
         
-        game = Game()
-        game.configure(DEFAULT_GAME_CONFIG)
-        game.init_game()
-
-        curr_player = game.round.get_player()
-        game.round.dealer._speto_cards = [10, 13]
-        
-        game.round.dealer.set_discard_pile([41, 8, 43])
-        curr_player._hand = [20, 21, 42]
-        curr_player.add_melds([3,4,5])
-
-        curr_player.calculate_melds_in_hand()
-
-        game.round._calculate_dangerous_discard_lv1(curr_player)
-        game.round._calculate_dangerous_discard_lv2(curr_player, game.round.dealer.speto_cards)
-        game.round._calculate_dangerous_discard_lv3(curr_player, game.round.dealer.discard_pile)
-
-        game._actions.append(0)
-        legal_actions = game.judge.get_legal_actions()
-
-        # print(["{}:{}".format(a, get_action_str(a)) for a in legal_actions])
-
-        state, id = game.step(1030)
-        # self.assertEqual(id, 1)
 
     def _1test_model(self):
 

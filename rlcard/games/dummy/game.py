@@ -74,7 +74,13 @@ class DummyGame:
         state['dangerous_lv1'] = list(dangerous_lv1)
         state['dangerous_lv2'] = self.round.dangerous_discard_lv2[player.player_id]
         state['dangerous_lv3'] = self.round.dangerous_discard_lv3[player.player_id]
+        state['dangerous_lv4'] = self.round.dangerous_discard_lv4[player.player_id]
+        # state['melds_depositable_speto'] = [meld for meld in self.round._all_melds_depositable_speto]
 
+        #take
+        take_ids = [ID_2_ACTION.index(",".join([str(c) for c in meld])) + take_card_action_id  for meld in self.round._all_melds_depositable_speto]
+        meld_ids = [ID_2_ACTION.index(",".join([str(c) for c in meld])) + meld_card_action_id  for meld in self.round._all_melds_depositable_speto]
+        state['melds_depositable_speto'] = take_ids + meld_ids
 
 
         state['current_hand'] = player.hand

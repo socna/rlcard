@@ -15,6 +15,7 @@ class DummyJudge:
         self._game = game
 
     def  get_legal_actions(self):
+        failure_actions = []
         legal_actions  = []
 
         last_action_id = self._game.get_last_action()
@@ -50,7 +51,14 @@ class DummyJudge:
 
                     if len(take_card) + len(hand_card) > 0:
                         rank_str = ",".join([str(c) for c in meld])
-                        legal_actions.append(ID_2_ACTION.index(rank_str) + take_card_action_id)
+                        action_id = ID_2_ACTION.index(rank_str) + take_card_action_id
+                        legal_actions.append(action_id)
+
+                        # print(meld, self._game.round._all_melds_depositable_speto)
+                        if meld in self._game.round._all_melds_depositable_speto and len(current_melds) > 0:
+                            # print("Take card")
+                            failure_actions.append(action_id)
+                            pass
 
         if last_action == Action.DRAW_CARD_ACTION or \
             last_action == Action.DEPOSIT_CARD_ACTION or \
@@ -58,7 +66,29 @@ class DummyJudge:
             last_action == Action.TAKE_CARD_ACTION:
 
             #discard
-            legal_actions += [card_id + discard_action_id for card_id in current_hand]
+            action_ids = [card_id + discard_action_id for card_id in current_hand]
+
+            for (deposit_cards, meld) in self._game.round._dangerous_discard_lv1[current_player.player_id]:
+                for action_id in action_ids:
+                    card_id = action_id - discard_action_id
+                    if card_id in deposit_cards:
+                        failure_actions.append(action_id)
+                        # print("discard1")
+            for action_id in action_ids:
+                card_id = action_id - discard_action_id
+                if card_id in self._game.round._dangerous_discard_lv2[current_player.player_id]:
+                    failure_actions.append(action_id)
+                    # print("discard2")
+
+                if card_id in self._game.round._dangerous_discard_lv3[current_player.player_id]:
+                    failure_actions.append(action_id)
+                    # print("discard3")
+            
+            legal_actions += action_ids
+            
+            
+
+                
 
         if last_action == Action.DRAW_CARD_ACTION or \
             last_action == Action.DEPOSIT_CARD_ACTION or \
@@ -71,7 +101,13 @@ class DummyJudge:
                 for meld in all_melds:
                     if len(meld) < len(current_hand):
                         rank_str = ",".join([str(c) for c in meld])
-                        legal_actions.append(ID_2_ACTION.index(rank_str) + meld_card_action_id)
+                        action_id = ID_2_ACTION.index(rank_str) + meld_card_action_id
+                        legal_actions.append(action_id)
+
+                        if meld in self._game.round._all_melds_depositable_speto:
+                            failure_actions.append(action_id)
+                            # print("meld card")
+                            pass
 
         if last_action == Action.DRAW_CARD_ACTION or \
             last_action == Action.DEPOSIT_CARD_ACTION or \
@@ -83,7 +119,13 @@ class DummyJudge:
                 for (deposit_cards, meld) in self._game.round.dangerous_discard_lv1[current_player.player_id]:
                     for deposit_card in deposit_cards:
                         ranks  = ",".join([str(c) for c in sorted(meld + [deposit_card], key=lambda x: (get_rank_id(x), get_suit_id(x)))])
-                        legal_actions.append(ID_2_ACTION.index(ranks) + deposit_card_action_id)
+                        action_id = ID_2_ACTION.index(ranks) + deposit_card_action_id
+                        legal_actions.append(action_id)
+
+                        if deposit_card in self._game.round._dangerous_discard_lv4[current_player.player_id]:
+                            failure_actions.append(action_id)
+                            # print("deposit")
+                        
 
         if last_action == Action.DEPOSIT_CARD_ACTION  or\
             last_action == Action.MELD_CARD_ACTION or \
@@ -100,7 +142,20 @@ class DummyJudge:
             print("last_action:", last_action)
             pass
         
-        return legal_actions
+       
+       
+        
+        good_actions = [action_id for action_id in legal_actions if action_id not in failure_actions]
+
+        
+        
+        # good_actions_str = ["{}-{}".format(action_id, get_action_str(action_id))  for action_id in good_actions]
+        # failure_actions_str = ["{}-{}".format(action_id, get_action_str(action_id))  for action_id in failure_actions]
+        # print(good_actions_str, failure_actions_str)
+        if len(good_actions) == 0:
+            return legal_actions
+        else:
+            return good_actions
 
 
     def get_payoffs(self):

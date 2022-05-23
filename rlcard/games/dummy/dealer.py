@@ -1,4 +1,6 @@
 import numpy as np
+
+from rlcard.games.dummy.melding import find_all_melds_depositable_by_speto
 from .player import DummyPlayer as Player
 
 class DummyDealer:
@@ -41,3 +43,4 @@ class DummyDealer:
             self._speto_cards.append(first_card)
 
         self._discard_pile.append(first_card)
+

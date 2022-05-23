@@ -19,17 +19,17 @@ class HumanAgent(object):
         print("[" +  ", ".join([ "{}-{}".format(lid, get_action_str(lid) )  for lid in state['legal_actions']]) + "]")
 
 
-        ROOT_PATH = os.path.join(rlcard.__path__[0], 'models/pretrained')
-        env = rlcard.make('dummy')
-        device = torch.device('cpu')
+        # ROOT_PATH = os.path.join(rlcard.__path__[0], 'models/pretrained')
+        # env = rlcard.make('dummy')
+        # device = torch.device('cpu')
 
-        model_path = os.path.join(ROOT_PATH, 'dummy_dmc', '{}_322448000.pth'.format(position))
-        agent = torch.load(model_path, map_location=device)
-        agent.set_device(device)
-        action_id, info = agent.eval_step(state)
-        print(action_id, info)
+        # model_path = os.path.join(ROOT_PATH, 'dummy_dmc', '{}_693344000.pth'.format(position))
+        # agent = torch.load(model_path, map_location=device)
+        # agent.set_device(device)
+        # action_id, info = agent.eval_step(state)
+        # print(action_id, info)
 
-        ''' 
+        
         action_id = input('>> You choose action (integer): ')
         
         while( not action_id.isdigit()):
@@ -40,7 +40,7 @@ class HumanAgent(object):
             print('Action illegel...')
             action_id = int(input('>> Re-choose action (integer): '))
 
-        '''
+        
 
         return action_id
 

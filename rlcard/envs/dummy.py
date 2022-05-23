@@ -28,11 +28,11 @@ class DummyEnv(Env):
 
     def _get_state_shape_size(self):
         if self.num_players == 2:
-            return 1091
+            return 2236
         elif self.num_players == 3:
-            return 1512
+            return 1564
         elif self.num_players == 4:
-            return 1933
+            return 1985
 
     def _extract_state(self, state):
         ''' Encode state
@@ -82,6 +82,8 @@ class DummyEnv(Env):
         dangerous_lv1 =  state['dangerous_lv1'] 
         dangerous_lv2 = state['dangerous_lv2'] 
         dangerous_lv3 = state['dangerous_lv3'] 
+        dangerous_lv4 = state['dangerous_lv4'] 
+        melds_depositable_speto = state['melds_depositable_speto']
 
 
         current_hand = state['current_hand']
@@ -98,6 +100,8 @@ class DummyEnv(Env):
         dangerous_lv1_rep = _encode_cards(dangerous_lv1)
         dangerous_lv2_rep = _encode_cards(dangerous_lv2)
         dangerous_lv3_rep = _encode_cards(dangerous_lv3)
+        dangerous_lv4_rep = _encode_cards(dangerous_lv4)
+        melds_depositable_speto_rep = _encode_actions(melds_depositable_speto, self.num_actions)
 
         current_hand_rep = _encode_cards(current_hand)
         current_meld_rep = _encode_melds(current_meld)
@@ -114,6 +118,8 @@ class DummyEnv(Env):
             dangerous_lv1_rep,
             dangerous_lv2_rep,
             dangerous_lv3_rep,
+            dangerous_lv4_rep,
+            melds_depositable_speto_rep,
             current_hand_rep,
             current_meld_rep,
             up_opponent_known_rep,
@@ -171,5 +177,12 @@ def _encode_melds(melds: List[int]):
         meld_id = ID_2_ACTION.index(",".join([str(c) for c in meld]))
 
         plane[meld_id] = 1
+
+    return plane
+
+def _encode_actions(actions: list, num_actions: int):
+    plane = np.zeros(num_actions, dtype=int)
+    for action_id in actions:
+        plane[action_id] = 1
 
     return plane

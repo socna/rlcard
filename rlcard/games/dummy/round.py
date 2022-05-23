@@ -1,5 +1,5 @@
 from rlcard.games.dummy.action import ID_2_ACTION
-from rlcard.games.dummy.melding import find_all_melds_depositable_by_speto, find_all_relate_speto_meld, get_all_melds, get_rank_id, get_suit_id, is_run_meld, is_set_meld
+from rlcard.games.dummy.melding import  find_all_melds_depositable_by_speto, find_all_relate_speto_meld, get_all_melds, get_rank_id, get_suit_id, is_run_meld, is_set_meld
 from .player import DummyPlayer as Player
 from .dealer import DummyDealer as Dealer
 import numpy as np
@@ -17,6 +17,7 @@ class DummyRound:
         self._dangerous_discard_lv2 = {i : [] for i in range(num_players)}
         self._dangerous_discard_lv3 = {i : [] for i in range(num_players)}
         self._dangerous_discard_lv4 = {i : [] for i in range(num_players)}
+        self._all_melds_depositable_speto = []
 
     @property
     def current_player_id(self) -> int:
@@ -107,9 +108,10 @@ class DummyRound:
 
         self._dangerous_discard_lv4[player.player_id] = list(lists)
                     
+    def _calculate_melds_depositable_by_speto(self):
+        speto = self._get_speto_depositable()
+        self._all_melds_depositable_speto = find_all_melds_depositable_by_speto(speto)
 
-
-                    
 
 
     def _calculate_dangerous_discard_lv2(self, player: Player, speto_cards: list):
@@ -195,9 +197,7 @@ class DummyRound:
         current_player = self.get_player()
         cards = [int(c) for c  in ID_2_ACTION[rank_id].split(",")]
 
-        speto = self._get_speto_depositable()
-        all_melds_depositable_speto = find_all_melds_depositable_by_speto(speto)
-        if cards in all_melds_depositable_speto:
+        if cards in self._all_melds_depositable_speto:
             #TODO trừ điểm
             # print("tru diem 1")
             current_player.add_transation(-45)
@@ -214,10 +214,10 @@ class DummyRound:
         
         
 
-
         self._calculate_dangerous_discard_lv1(current_player)
         self._calculate_dangerous_discard_lv2(current_player, self.dealer.speto_cards)
         self._calculate_dangerous_discard_lv3(current_player, self.dealer.speto_cards)
+        self._calculate_melds_depositable_by_speto()
 
         
 
@@ -225,9 +225,7 @@ class DummyRound:
         current_player = self.get_player()
         cards = [int(c) for c  in ID_2_ACTION[rank_id].split(",")]
 
-        speto = self._get_speto_depositable()
-        all_melds_depositable_speto = find_all_melds_depositable_by_speto(speto)
-        if cards in all_melds_depositable_speto:
+        if cards in self._all_melds_depositable_speto:
             #TODO trừ điểm
             # print("tru diem 2")
             current_player.add_transation(-45)
@@ -259,7 +257,7 @@ class DummyRound:
         self._calculate_dangerous_discard_lv1(current_player)
         self._calculate_dangerous_discard_lv2(current_player, self.dealer.speto_cards)
         self._calculate_dangerous_discard_lv3(current_player, self.dealer.speto_cards)
-
+        self._calculate_melds_depositable_by_speto()
         
 
     def discard(self, card_id):
@@ -294,6 +292,7 @@ class DummyRound:
         self._calculate_dangerous_discard_lv1(current_player)
         self._calculate_dangerous_discard_lv2(current_player, self.dealer.speto_cards)
         self._calculate_dangerous_discard_lv3(current_player, self.dealer.speto_cards)
+        self._calculate_melds_depositable_by_speto()
 
         #Đổi lượt chơi
         self._current_player_id = (self._current_player_id + 1) % self.num_players
