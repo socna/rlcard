@@ -14,31 +14,31 @@ class HumanAgent(object):
 
 
     @staticmethod
-    def step(state, position):
+    def step(state, position = 1):
         _print_state(state['raw_obs'])
         print("[" +  ", ".join([ "{}-{}".format(lid, get_action_str(lid) )  for lid in state['legal_actions']]) + "]")
 
 
-        # ROOT_PATH = os.path.join(rlcard.__path__[0], 'models/pretrained')
-        # env = rlcard.make('dummy')
-        # device = torch.device('cpu')
+        ROOT_PATH = os.path.join(rlcard.__path__[0], 'models/pretrained')
+        env = rlcard.make('dummy')
+        device = torch.device('cpu')
 
-        # model_path = os.path.join(ROOT_PATH, 'dummy_dmc', '{}_693344000.pth'.format(position))
-        # agent = torch.load(model_path, map_location=device)
-        # agent.set_device(device)
-        # action_id, info = agent.eval_step(state)
-        # print(action_id, info)
+        model_path = os.path.join(ROOT_PATH, 'dummy_dmc', '{}_693344000.pth'.format(position))
+        agent = torch.load(model_path, map_location=device)
+        agent.set_device(device)
+        action_id, info = agent.eval_step(state)
+        print(action_id, info)
 
         
-        action_id = input('>> You choose action (integer): ')
+        # action_id = input('>> You choose action (integer): ')
         
-        while( not action_id.isdigit()):
-            action_id = input('>> You choose action (integer): ')
-        action_id = int(action_id)
+        # while( not action_id.isdigit()):
+        #     action_id = input('>> You choose action (integer): ')
+        # action_id = int(action_id)
 
-        while action_id not in state['legal_actions']:
-            print('Action illegel...')
-            action_id = int(input('>> Re-choose action (integer): '))
+        # while action_id not in state['legal_actions']:
+        #     print('Action illegel...')
+        #     action_id = int(input('>> Re-choose action (integer): '))
 
         
 

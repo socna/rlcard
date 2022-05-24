@@ -134,17 +134,11 @@ class DummyJudge:
             if len(current_hand) == 1:
                 return [knock_action_id + current_hand[0]]
 
-        if  last_action == Action.DISCARD_ACTION:
+        if  last_action == Action.DRAW_CARD_ACTION:
             if num_stoke_pile == 0:
-                return [knock_action_id + 52]
+                action_ids = [card_id + knock_action_id for card_id in current_hand]
+                return action_ids
 
-        if len(legal_actions) == 0 and last_action != Action.KNOCK_ACTION:
-            print("last_action:", last_action)
-            pass
-        
-       
-       
-        
         good_actions = [action_id for action_id in legal_actions if action_id not in failure_actions]
 
         

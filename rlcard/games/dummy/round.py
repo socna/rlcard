@@ -234,7 +234,6 @@ class DummyRound:
         #add to score cards
         for c in cards:
             current_player.score_cards.append(c)
-
         cards_in_hand =  [c for c in cards if c in current_player.hand]
         cards_in_discard = [c for c in cards if c in self.dealer.discard_pile]
 
@@ -304,10 +303,12 @@ class DummyRound:
             pass
         else:
             current_player.remove_card_from_hand(card_id)
-            if card_id in self._dangerous_discard_lv1:
+
+            if len(current_player.hand) == 0:
+                if card_id in self._dangerous_discard_lv1:
+                    current_player.add_transation(50)
+                
                 current_player.add_transation(50)
-            
-            current_player.add_transation(50)
         
         self._is_over = True
 

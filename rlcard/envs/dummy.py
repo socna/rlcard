@@ -28,7 +28,7 @@ class DummyEnv(Env):
 
     def _get_state_shape_size(self):
         if self.num_players == 2:
-            return 2236
+            return 1699
         elif self.num_players == 3:
             return 1564
         elif self.num_players == 4:
@@ -76,14 +76,14 @@ class DummyEnv(Env):
 
         num_stoke_pile  = state['num_stoke_pile']
         discard_pile = state['discard_pile']
-        speto_cards = state['speto_cards']
+        # speto_cards = state['speto_cards']
         known_cards = state['known_cards']
 
-        dangerous_lv1 =  state['dangerous_lv1'] 
-        dangerous_lv2 = state['dangerous_lv2'] 
-        dangerous_lv3 = state['dangerous_lv3'] 
-        dangerous_lv4 = state['dangerous_lv4'] 
-        melds_depositable_speto = state['melds_depositable_speto']
+        # dangerous_lv1 =  state['dangerous_lv1'] 
+        # dangerous_lv2 = state['dangerous_lv2'] 
+        # dangerous_lv3 = state['dangerous_lv3'] 
+        # dangerous_lv4 = state['dangerous_lv4'] 
+        # melds_depositable_speto = state['melds_depositable_speto']
 
 
         current_hand = state['current_hand']
@@ -97,11 +97,11 @@ class DummyEnv(Env):
         discard_pile_rep = _encode_cards(discard_pile)
         known_cards_rep = _encode_cards(known_cards)
 
-        dangerous_lv1_rep = _encode_cards(dangerous_lv1)
-        dangerous_lv2_rep = _encode_cards(dangerous_lv2)
-        dangerous_lv3_rep = _encode_cards(dangerous_lv3)
-        dangerous_lv4_rep = _encode_cards(dangerous_lv4)
-        melds_depositable_speto_rep = _encode_actions(melds_depositable_speto, self.num_actions)
+        # dangerous_lv1_rep = _encode_cards(dangerous_lv1)
+        # dangerous_lv2_rep = _encode_cards(dangerous_lv2)
+        # dangerous_lv3_rep = _encode_cards(dangerous_lv3)
+        # dangerous_lv4_rep = _encode_cards(dangerous_lv4)
+        # melds_depositable_speto_rep = _encode_actions(melds_depositable_speto, self.num_actions)
 
         current_hand_rep = _encode_cards(current_hand)
         current_meld_rep = _encode_melds(current_meld)
@@ -115,11 +115,11 @@ class DummyEnv(Env):
             num_stoke_pile_rep,
             discard_pile_rep,
             known_cards_rep,
-            dangerous_lv1_rep,
-            dangerous_lv2_rep,
-            dangerous_lv3_rep,
-            dangerous_lv4_rep,
-            melds_depositable_speto_rep,
+            # dangerous_lv1_rep,
+            # dangerous_lv2_rep,
+            # dangerous_lv3_rep,
+            # dangerous_lv4_rep,
+            # melds_depositable_speto_rep,
             current_hand_rep,
             current_meld_rep,
             up_opponent_known_rep,
