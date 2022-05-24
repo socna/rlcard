@@ -24,7 +24,12 @@ def train(args):
         num_actor_devices=args.num_actor_devices,
         num_actors=args.num_actors,
         training_device=args.training_device,
-        exp_epsilon=args.exp_epsilon
+        exp_epsilon=args.exp_epsilon,
+
+        learning_rate=args.learning_rate,
+        alpha=args.alpha,
+        epsilon=args.epsilon
+
     )
 
     # Train DMC Agents
@@ -101,6 +106,29 @@ if __name__ == '__main__':
         type=float,
         help='exp_epsilon',
     )
+
+    parser.add_argument(
+        '--epsilon',
+        default="0",
+        type=float,
+        help='epsilon',
+    )
+
+    parser.add_argument(
+        '--alpha',
+        default="0",
+        type=float,
+        help='alpha',
+    )
+
+    parser.add_argument(
+        '--learning_rate',
+        default="0",
+        type=float,
+        help='learning_rate',
+    )
+
+
 
 
     args = parser.parse_args()

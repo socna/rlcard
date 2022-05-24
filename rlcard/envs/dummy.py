@@ -28,7 +28,7 @@ class DummyEnv(Env):
 
     def _get_state_shape_size(self):
         if self.num_players == 2:
-            return 1699
+            return 935
         elif self.num_players == 3:
             return 1564
         elif self.num_players == 4:

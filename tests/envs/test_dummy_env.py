@@ -10,6 +10,6 @@ class TestDummyEnv(unittest.TestCase):
         env.set_agents([RandomAgent(env.num_actions) for _ in range(env.num_players)])
         trajectories, payoffs = env.run(is_training=False)
 
-        print(trajectories)
+        # print(trajectories)
 if __name__ == '__main__':
     unittest.main()
