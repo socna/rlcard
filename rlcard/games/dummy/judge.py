@@ -153,17 +153,24 @@ class DummyJudge:
 
 
     def get_payoffs(self):
+        # payoffs = [1 if self._game.round.winner_id == i else 0 for i in range(self._game.get_num_players())]
+
+        # if payoffs == [0, 0]:
+
+        #     deadwood_scores = [_get_sum_deadwood_value(p.hand, self._game.round.dealer.speto_cards) for p in self._game.round.all_players]
+        #     if min(deadwood_scores) != max(deadwood_scores):
+        #         min_index = deadwood_scores.index(min(deadwood_scores))
+        #         payoffs[min_index] = 1
         payoffs = [0 for _ in range(self._game.get_num_players())]
         for i in range(self._game.get_num_players()):
             player = self._game.round.get_player(i)
             payoff = self.get_payoff(player)
             payoffs[i] = payoff
 
-        # _payoffs =  payoffs.copy()
+        _payoffs =  payoffs.copy()
 
-        # for i in range(len(_payoffs)):
-        #     payoffs[i] = sum([v for k ,v in enumerate(_payoffs) if k != i])
-
+        for i in range(len(_payoffs)):
+            payoffs[i] = sum([v for k ,v in enumerate(_payoffs) if k != i])
         return payoffs
 
     def get_payoff(self, player: 'DummyPlayer'):
@@ -177,6 +184,8 @@ class DummyJudge:
 rank_to_deadwood_value = {"A": 15, "2": 5, "3": 5, "4": 5, "5": 5, "6": 5, "7": 5, "8": 5, "9": 5,
                           "T": 10, "J": 10, "Q": 10, "K": 10}
 
+def _get_sum_deadwood_value(cards, speto_cards):
+    return sum([_get_deadwood_value(card, speto_cards) for card in cards])
 def _get_deadwood_value(card, speto_cards):
     rank_id = get_rank_id(card)
     deadwood_value = rank_to_deadwood_value.get(RANK_STR[rank_id], 10)  # default to 10 is key does not exist

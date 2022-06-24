@@ -10,7 +10,7 @@ ROOT_PATH = os.path.join(rlcard.__path__[0], 'models/pretrained')
 env = rlcard.make('dummy')
 device = torch.device('cpu')
 
-model_path = os.path.join(ROOT_PATH, 'dummy_dmc', '{}.pth'.format("1_693344000"))
+model_path = os.path.join(ROOT_PATH, 'dummy_dmc', '{}.pth'.format("1_802172800"))
 agent = torch.load(model_path, map_location=device)
 agent.set_device(device)
 

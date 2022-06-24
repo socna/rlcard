@@ -10,6 +10,7 @@ class DummyRound:
         self._np_random = np_random
         self._is_over = False
         self._dealer = Dealer(self._np_random)
+        self.winner_id = -1
 
         self._players = [ Player(i) for i in range(num_players)]
 
@@ -302,6 +303,7 @@ class DummyRound:
             #hhet loc
             pass
         else:
+            self.winner_id = current_player.player_id
             current_player.remove_card_from_hand(card_id)
 
             if len(current_player.hand) == 0:

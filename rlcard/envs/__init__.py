@@ -49,12 +49,12 @@ register(
 )
 
 register(
+    env_id='demo',
+    entry_point='rlcard.envs.demo:DemoEnv',
+)
+
+register(
     env_id='dummy',
     entry_point='rlcard.envs.dummy:DummyEnv',
 )
 
-
-register(
-    env_id='demo',
-    entry_point='rlcard.envs.demo:DemoEnv',
-)
