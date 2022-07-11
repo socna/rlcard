@@ -1,7 +1,7 @@
 import rlcard
 import torch
 import os
-from examples.human.dummy.human_agent import HumanAgent
+from rlcard.agents.human_agents.human_agent import HumanAgent
 
 
 ROOT_PATH = os.path.join(rlcard.__path__[0], 'models/pretrained')
